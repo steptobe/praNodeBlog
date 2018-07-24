@@ -53,8 +53,21 @@ app.use(function (req, res, next) {
   next()
 })
 routes(app)
-
-// 监听端口，启动程序
-app.listen(config.port, function () {
-  console.log(`${pkg.name} listening on port ${config.port}`)
+app.use(function (err, req, res, next) {
+  console.error(err)
+  req.flash('error', err.message)
+  res.redirect('/posts')
+})
+// if (module.parent) {
+//   // 被 require，则导出 app
+//   module.exports = app
+// } else {
+//   // 监听端口，启动程序
+//   app.listen(config.port, function () {
+//     console.log(`${pkg.name} listening on port ${config.port}`)
+//   })
+// }
+const port = process.env.PORT || config.port
+app.listen(port, function () {
+  console.log(`${pkg.name} listening on port ${port}`)
 })
